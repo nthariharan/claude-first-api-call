@@ -1,0 +1,17 @@
+{
+  "name": "claude-first-api-call",
+  "version": "1.0.0",
+  "description": "to test api call to claude",
+  "license": "ISC",
+  "author": "hari",
+  "type": "module",
+  "main": "claude-test.js",
+  "scripts": {
+    "test": "node .\\claude-test.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.8.0",
+    "@dotenvx/dotenvx": "^2.38.2"
+  },
+  "devDependencies": {}
+}

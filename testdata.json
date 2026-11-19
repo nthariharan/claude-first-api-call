@@ -1,11 +1,17 @@
 [
   {
-    "task": "Write a Python function that extracts the AWS region from an S3 bucket URL in the format 's3://bucket-name.region.amazonaws.com'. The function should return the region string."
+    "task": "Parse an AWS S3 bucket name and object key from an S3 URI in the format 's3://bucket-name/path/to/object'. Extract both the bucket name and the full object key.",
+    "format": "regex",
+    "solution-criteria": "The regex must correctly capture the bucket name and object key separately, handling paths with multiple slashes and special characters (hyphens, underscores, dots) in bucket names and keys."
   },
   {
-    "task": "Create a JSON object that represents an AWS Lambda function configuration with environment variables for database credentials (DB_HOST, DB_USER, DB_PASSWORD) and a timeout of 60 seconds."
+    "task": "Create a JSON object representing an AWS Lambda function configuration that includes function name, runtime (Python 3.11), memory size (512 MB), timeout (60 seconds), and an environment variable for a database connection string.",
+    "format": "json",
+    "solution-criteria": "The JSON must follow AWS Lambda configuration schema, include all specified fields with correct data types, and be valid JSON that could be used as CloudFormation or Terraform input."
   },
   {
-    "task": "Write a Regex pattern that matches valid AWS IAM role ARNs in the format 'arn:aws:iam::123456789012:role/role-name', where the account ID is 12 digits and role names can contain alphanumeric characters, hyphens, and forward slashes."
+    "task": "Write a Python function that takes an AWS IAM policy string (as a dict) and returns a list of all AWS service actions (e.g., 's3:GetObject', 'dynamodb:Query') referenced in the policy's Action field, handling both single actions and wildcards.",
+    "format": "python",
+    "solution-criteria": "The function must correctly extract all actions from the Action field, handle both string and list formats, expand wildcards appropriately (e.g., 's3:*' returns all S3 actions or indicates wildcard), and return a deduplicated list."
   }
 ]

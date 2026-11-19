@@ -9,6 +9,15 @@ const client = new Anthropic({
     } */
 });
 
+/**
+ * Logs the tokens spent on one API call.
+ * @param {object} message - the Message object returned by the API
+ */
+function logTokenUsage(message) {
+    const { input_tokens, output_tokens } = message.usage;
+    console.log(`[Tokens] input: ${input_tokens} | output: ${output_tokens} | total: ${input_tokens + output_tokens}`);
+}
+
 async function getUserInput() {
     const rl = readline.createInterface(input, output);
     const userInput = await rl.question("Please enter your input to the model below :\n>>");
@@ -57,6 +66,7 @@ async function createChat(msg, systemPrompt = undefined) {
         params.system = systemPrompt;
     }
     const message = await client.messages.create(params);
+    logTokenUsage(message);
     //console.log(message);
     const modelResp = message.content.filter(resp => resp.type === "text").map(x => x.text).join("");
     //console.log("Model REsponse =>\n",modelResp);
@@ -65,9 +75,9 @@ async function createChat(msg, systemPrompt = undefined) {
 
 async function chatStream(msg, systemPrompt = undefined) {
     let params = {
-        max_tokens: 1024,
+        max_tokens: 2000,
         messages: msg,
-        model: 'claude-haiku-5-5',
+        model: 'claude-haiku-4-5',
         stream: true
     };
     if (systemPrompt !== undefined) {
@@ -79,6 +89,8 @@ async function chatStream(msg, systemPrompt = undefined) {
             process.stdout.write(text);
         });
     const message = await stream.finalMessage();
+    console.log(); // newline after streamed text
+    logTokenUsage(message);
 
     // const textBlock = message.content.find((block) => block.type === "text");
     // if (textBlock && textBlock.type === "text") {
@@ -95,15 +107,16 @@ async function chatStream(msg, systemPrompt = undefined) {
  */
 async function createChatWithStopSeq(msg, stopSeq = ["```"]) {
     let params = {
-        max_tokens: 1024,
+        max_tokens: 2000,
         messages: msg,
-        model: 'claude-sonnet-5-5',  //Using Older models since new model does not support stop seq.
+        model: 'claude-haiku-4-5',  //Using Older models since new model does not support stop seq.
         stop_sequences : stopSeq
     }
     
     const message = await client.messages.create(params);
+    logTokenUsage(message);
     const modelResp = message.content.filter(resp => resp.type === "text").map(x => x.text).join("");
     return modelResp;
 }
 
-export { addAssistantMessage, addUserMessage, createChat, getUserInput, chatStream , createChatWithStopSeq };
+export { addAssistantMessage, addUserMessage, createChat, getUserInput, chatStream , createChatWithStopSeq, logTokenUsage };

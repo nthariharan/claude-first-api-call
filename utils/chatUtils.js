@@ -103,6 +103,20 @@ async function createChat(msg, systemPrompt = undefined) {
     return modelResp;
 }
 
+async function createChatHaiku45(msg, systemPrompt = undefined) {
+    let params = {
+        max_tokens: 1024,
+        messages: msg,
+        model: 'claude-haiku-4-5'
+    };
+    if (systemPrompt !== undefined) {
+        params.system = systemPrompt;
+    }
+    const message = await client.messages.create(params);
+    logTokenUsage(message);
+    return message.content.filter(resp => resp.type === "text").map(x => x.text).join("");
+}
+
 async function chatStream(msg, systemPrompt = undefined) {
     let params = {
         max_tokens: 2000,
@@ -257,4 +271,4 @@ async function runTools(message) {
     return toolResultBlocks;
 }
 
-export { addAssistantMessage, addUserMessage, createChat, getUserInput, chatStream, createChatWithStopSeq, logTokenUsage, createChatWithTools, addToolResultMessage, textFromMessage, runConversation };
+export { addAssistantMessage, addUserMessage, createChat, createChatHaiku45,getUserInput, chatStream, createChatWithStopSeq, logTokenUsage, createChatWithTools, addToolResultMessage, textFromMessage, runConversation };
